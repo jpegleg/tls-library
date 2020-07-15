@@ -1,1 +1,77 @@
 # generation
+
+
+# v3 extension file
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+countryName = XX
+countryName_default = XX
+stateOrProvinceName = XX
+localityName = XX
+localityName_default = XX
+organizationalUnitName = XX
+organizationalUnitName_default = XX
+commonName = TEMPLATE
+commonName_max = 64
+
+[v3_req]
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = TEMPLATE
+
+# RSA key generation
+openssl genrsa 4096 > rsa.pem
+
+# RSA key CSR creation
+SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=Security/CN=$line"
+openssl req -sha256 -nodes -out CSR.csr -new -key rsa.pem -config v3.ext -subj "${SUBJECT}"
+
+# RSA sign (version 1, will not have browser trust)
+openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
+
+# RSA sign version 3 (identical for other types, works for all algos)
+if [ -f ca-intermediate.srl ]; then
+  openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca-intermediate.crt -CAkey intermediate.key -out rsa.crt -sha256 -CAserial ca-intermediate.srl -extensions 'v3_req'
+else
+  openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca-intermediate.crt -CAkey intermediate.key -out rsa.crt -sha256 -CAcreateserial -extensions 'v3_req'
+fi
+
+# extract RSA public key from private key
+openssl rsa -in rsa-key.pem -pubout > rsa.pub
+
+# extract RSA public key from certificate
+openssl x509 -in extract.crt  -noout -pubkey > cert.pub
+
+# RSA sign file
+openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
+
+# RSA verify signed file
+openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
+
+
+# secp384r1 key generation
+openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
+
+# secp384r1 CSR creation (identical for other types, works for all algos)
+SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=Security/CN=$line"
+openssl req -sha256 -nodes -out CSR.csr -new -key secp384r1.pem -config v3.ext -subj "${SUBJECT}"
+
+# secp384r1 sign (identical for other types, works for all algos)
+if [ -f ca-intermediate.srl ]; then
+  openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca-intermediate.crt -CAkey intermediate.key -out secp384r1.crt -sha256 -CAserial ca-intermediate.srl -extensions 'v3_req'
+else
+  openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca-intermediate.crt -CAkey intermediate.key -out secp384r1.crt -sha256 -CAcreateserial -extensions 'v3_req'
+fi
+
+# secp384r1 public key
+openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
+
+# secp384r1 derive shared secret
+openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
