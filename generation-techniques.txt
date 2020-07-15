@@ -100,3 +100,11 @@ openssl dgst -ecdsa-with-SHA1 -sign secp384r1.pem test.pdf > signature.bin
 # verify signature
 openssl dgst -ecdsa-with-SHA1 -verify secp384r1.pub -signature signature.bin test.pdf
 
+
+
+###############################################################################################################################
+#  generate DH params                                                                                                         #
+###############################################################################################################################
+
+openssl dhparam -out /etc/dhparam-2048 2048
+openssl dhparam -out /etc/dhparam-4096 4096
