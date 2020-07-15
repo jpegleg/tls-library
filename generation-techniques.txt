@@ -71,6 +71,8 @@ openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
 # RSA verify signed file
 openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
 
+# Generate encrypted (symmetric password) RSA private key and self signed certificate
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 
 
 
