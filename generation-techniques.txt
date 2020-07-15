@@ -59,6 +59,15 @@ openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
 openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
 
 
+
+
+###############################################################################################################################
+#  (ecparam) examples with secp384r1, replace with any curve available, see below                                             #
+###############################################################################################################################
+
+# list curves
+openssl ecparam -list_curves
+
 # secp384r1 key generation
 openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 
@@ -78,3 +87,10 @@ openssl ec -in secp384r1.pem -pubout -out secp384r1.pub
 
 # secp384r1 derive shared secret
 openssl pkeyutl -derive -inkey secp384r1.pem -peerkey peerpub.pem -out secret.bin
+
+# create signature file
+openssl dgst -ecdsa-with-SHA1 -sign secp384r1.pem test.pdf > signature.bin
+
+# verify signature
+openssl dgst -ecdsa-with-SHA1 -verify secp384r1.pub -signature signature.bin test.pdf
+
