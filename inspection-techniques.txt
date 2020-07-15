@@ -1,1 +1,34 @@
 # Inspection
+
+#   Where INSPECT is the domain, host, or IP of the subject to be inspected.
+
+
+#############
+# with cURL #
+#############
+
+curl -vvv https://INSPECT
+
+################
+# with openssl #
+################
+
+openssl s_client -connect INSPECT:443
+
+################
+# with ssldump #
+################
+
+ssldump # then visit site in web browser etc
+
+################
+# with tcpdump #
+################
+
+tcpdump -ni eth0 "tcp port 443 and (tcp[((tcp[12] & 0xf0) >> 2)] = 0x16)" # then visit the site in web browser etc
+
+#############
+# with nmap #
+#############
+
+nmap --script ssl-cert -p 443 INSPECT
