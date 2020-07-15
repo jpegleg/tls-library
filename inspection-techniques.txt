@@ -1,8 +1,6 @@
- o                       _/_
-,  _ _   (    ,_   _  _, /  
-(_/ / /_/_)__/|_)_(/_(__(__ 
-             /|             
-            (/              
+I N S P E C T cryptographic components
+
+
 
 #   Where INSPECT is the domain, host, or IP of the subject to be inspected.
 
