@@ -30,7 +30,7 @@ DNS.1 = TEMPLATE
 openssl genrsa 4096 > rsa.pem
 
 # RSA key CSR creation
-SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=Security/CN=$line"
+SUBJECT="/C=XX/ST=XX/Locality=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
 openssl req -sha256 -nodes -out CSR.csr -new -key rsa.pem -config v3.ext -subj "${SUBJECT}"
 
 # RSA sign (version 1, will not have browser trust)
@@ -60,7 +60,7 @@ openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
 openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 
 # secp384r1 CSR creation (identical for other types, works for all algos)
-SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=Security/CN=$line"
+SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=XX/CN=XX" # populate values, replace XX with your details
 openssl req -sha256 -nodes -out CSR.csr -new -key secp384r1.pem -config v3.ext -subj "${SUBJECT}"
 
 # secp384r1 sign (identical for other types, works for all algos)
