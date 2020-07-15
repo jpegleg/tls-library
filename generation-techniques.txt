@@ -112,5 +112,8 @@ openssl dgst -ecdsa-with-SHA1 -verify secp384r1.pub -signature signature.bin tes
 #  generate DH params                                                                                                         #
 ###############################################################################################################################
 
+# 2048 bit
 openssl dhparam -out /etc/dhparam-2048 2048
+
+# 4096 bit
 openssl dhparam -out /etc/dhparam-4096 4096
