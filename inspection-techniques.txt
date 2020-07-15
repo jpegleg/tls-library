@@ -65,3 +65,31 @@ openssl x509 -noout -modulus -in certificate.crt | openssl md5; openssl rsa -noo
 
 openssl s_client -servername INSPECT -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
 
+
+###############################################################################################################################
+# create and verify signatures                                                                                                #
+###############################################################################################################################
+
+# RSA sign file
+openssl rsautl -sign -in input.txt -inkey rsa.pem -out output.sign
+
+# RSA verify signed file
+openssl rsautl -verify -in output.sign -inkey rsa.pub -pubin
+
+# create signature file
+openssl dgst -ecdsa-with-SHA1 -sign secp384r1.pem test.pdf > signature.bin
+
+# verify signature
+openssl dgst -ecdsa-with-SHA1 -verify secp384r1.pub -signature signature.bin test.pdf
+
+###############################################################################################################################
+# validate trust chain                                                                                                        #
+###############################################################################################################################
+
+openssl verify -verbose -CAfile root.crt -untrusted intermediate.crt personal.crt
+
+###############################################################################################################################
+# inspect x509 certificate file                                                                                               #
+###############################################################################################################################
+
+openssl x509 -in example.crt -text -noout
