@@ -32,6 +32,9 @@ openssl genrsa 4096 > rsa.pem
 # 2048 RSA key generation
 openssl genrsa 2048 > rsa.pem
 
+# create CA certificate
+openssl req -sha256 -new -x509 -key rsa.pem -out ca.crt -days 3650
+
 # RSA key CSR creation
 SUBJECT="/C=XX/ST=XX/Locality=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
 openssl req -sha256 -nodes -out CSR.csr -new -key rsa.pem -config v3.ext -subj "${SUBJECT}"
@@ -74,6 +77,9 @@ openssl ecparam -name secp384r1 -genkey -noout -out secp384r1.pem
 # secp384r1 CSR creation (identical for other types, works for all algos)
 SUBJECT="/C=XX/ST=XX/Locality=XX/O=Heaven/OU=XX/CN=XX" # populate values, replace XX with your details
 openssl req -sha256 -nodes -out CSR.csr -new -key secp384r1.pem -config v3.ext -subj "${SUBJECT}"
+
+# create CA certificate
+openssl req -sha256 -new -x509 -key secp384r1.pem -out ca.crt -days 3650
 
 # secp384r1 sign (identical for other types, works for all algos)
 if [ -f ca-intermediate.srl ]; then
