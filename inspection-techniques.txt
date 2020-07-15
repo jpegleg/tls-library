@@ -103,4 +103,4 @@ openssl x509 -in example.crt -text -noout
 #  java keytool                                                                                                               #
 ###############################################################################################################################
 
-keytool -list -v keystore.jks
+keytool -list -v -keystore keystore.jks
