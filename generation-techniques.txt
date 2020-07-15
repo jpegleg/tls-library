@@ -26,8 +26,11 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1 = TEMPLATE
 
-# RSA key generation
+# 4096 RSA key generation
 openssl genrsa 4096 > rsa.pem
+
+# 2048 RSA key generation
+openssl genrsa 2048 > rsa.pem
 
 # RSA key CSR creation
 SUBJECT="/C=XX/ST=XX/Locality=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
