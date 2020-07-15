@@ -2,6 +2,10 @@
 
 #   Where INSPECT is the domain, host, or IP of the subject to be inspected.
 
+###############################################################################################################################
+#  inspect a live site                                                                                                        #
+###############################################################################################################################
+
 #-------------------------[ default programs
 
 #############
@@ -45,3 +49,19 @@ nmap --script ssl-cert -p 443 INSPECT
 #
 # https://www.ssllabs.com/ssltest/
 # https://www.immuniweb.com/websec/
+
+
+
+
+###############################################################################################################################
+# inspect modules or pin                                                                                                      #
+###############################################################################################################################
+
+# modulus from files
+
+openssl x509 -noout -modulus -in certificate.crt | openssl md5; openssl rsa -noout -modulus -in privateKey.key | openssl md5; openssl req -noout -modulus -in CSR.csr | openssl md5
+
+# pin from live site
+
+openssl s_client -servername INSPECT -connect "$hashsite":443 | openssl x509 -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64;
+
