@@ -115,3 +115,8 @@ openssl pkcs12 -info -in example.crt
 ###############################################################################################################################
 
 keytool -list -v -keystore keystore.jks
+
+keytool -printcert -v -file mydomain.crt
+
+keytool -list -v -keystore keystore.jks -alias mydomain
+
