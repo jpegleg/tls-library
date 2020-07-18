@@ -132,3 +132,13 @@ openssl dhparam -out /etc/dhparam-4096 4096
 
 keytool -genkey -keyalg RSA -alias examplealias -keystore keystore.jks
 
+keytool -genkey -alias mydomain -keyalg RSA -keystore keystore.jks  -keysize 2048
+
+keytool -certreq -alias mydomain -keystore keystore.jks -file mydomain.csr
+
+keytool -import -trustcacerts -alias root -file Thawte.crt -keystore keystore.jks
+
+keytool -import -trustcacerts -alias mydomain -file mydomain.crt -keystore keystore.jks
+
+keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass password -validity
+
