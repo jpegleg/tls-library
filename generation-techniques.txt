@@ -142,3 +142,9 @@ keytool -import -trustcacerts -alias mydomain -file mydomain.crt -keystore keyst
 
 keytool -genkey -keyalg RSA -alias selfsigned -keystore keystore.jks -storepass password -validity
 
+keytool -delete -alias mydomain -keystore keystore.jks
+
+keytool -storepasswd -new new_storepass -keystore keystore.jks
+
+keytool -export -alias mydomain -file mydomain.crt -keystore keystore.jks
+
