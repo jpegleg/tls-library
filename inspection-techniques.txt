@@ -120,3 +120,4 @@ keytool -printcert -v -file mydomain.crt
 
 keytool -list -v -keystore keystore.jks -alias mydomain
 
+keytool -list -v -keystore $JAVA_HOME/jre/lib/security/cacerts
