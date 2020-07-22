@@ -73,6 +73,11 @@ openssl s_client -servername INSPECT -connect "$hashsite":443 | openssl x509 -pu
 
 openssl s_client -connect INSPECT:389 -starttls ldap -showcerts
 
+###############################################################################################################################
+# inspect SMTP certificate                                                                                                   #
+###############################################################################################################################
+
+openssl s_client -connect mail.example.com:25 -starttls smtp
 
 ###############################################################################################################################
 # create and verify signatures                                                                                                #
