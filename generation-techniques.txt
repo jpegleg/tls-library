@@ -46,7 +46,7 @@ openssl genrsa 2048 > rsa.pem
 openssl req -sha256 -new -x509 -key rsa.pem -out ca.crt -days 3650
 
 # RSA key CSR creation
-SUBJECT="/C=XX/ST=XX/Locality=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
+SUBJECT="/C=XX/ST=XX/L=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
 openssl req -sha256 -nodes -out CSR.csr -new -key rsa.pem -config v3.ext -subj "${SUBJECT}"
 
 # RSA sign (version 1, will not have browser trust, do version 3 certificates for browser usage)
