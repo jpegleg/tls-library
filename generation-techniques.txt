@@ -47,6 +47,7 @@ openssl req -sha256 -new -x509 -key rsa.pem -out ca.crt -days 3650
 
 # RSA key CSR creation
 SUBJECT="/C=XX/ST=XX/L=XX/O=XX/OU=XX/CN=XX" # populate values, replace XX with your details
+SUBJECT="/C=XX/ST=XX/L=XX/O=system:nodes/OU=XX/CN=system:node:YOURTHING" # example for k8s PKI requirements
 openssl req -sha256 -nodes -out CSR.csr -new -key rsa.pem -config v3.ext -subj "${SUBJECT}"
 
 # RSA sign (version 1, will not have browser trust, do version 3 certificates for browser usage)
@@ -58,6 +59,22 @@ if [ -f ca-intermediate.srl ]; then
 else
   openssl x509 -req -days 365 -in CSR.csr -extfile v3.ext -CA ca-intermediate.crt -CAkey intermediate.key -out rsa.crt -sha256 -CAcreateserial -extensions 'v3_req'
 fi
+
+# k8s sign
+cat <<EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: YOURTHING.default
+spec:
+  request: $(cat CSR.csr | base64 | tr -d '\n')
+  signerName: kubernetes.io/kubelet-serving
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+EOF
+kubectl certificate approve YOUTHING.default
 
 # extract RSA public key from private key
 openssl rsa -in rsa-key.pem -pubout > rsa.pub
