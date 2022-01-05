@@ -74,7 +74,7 @@ spec:
   - key encipherment
   - server auth
 EOF
-kubectl certificate approve YOUTHING.default
+kubectl certificate approve YOURTHING.default
 
 # extract RSA public key from private key
 openssl rsa -in rsa-key.pem -pubout > rsa.pub
