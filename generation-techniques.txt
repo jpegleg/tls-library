@@ -165,3 +165,16 @@ keytool -storepasswd -new new_storepass -keystore keystore.jks
 
 keytool -export -alias mydomain -file mydomain.crt -keystore keystore.jks
 
+###############################################################################################################################
+#  AWS KMS                                                                                                                    #
+###############################################################################################################################
+
+aws kms create-key
+aws kms encrypt --key-id $KEYID --plaintext "my message to encrypt"
+aws kms decrypt --cipher-text-blob fileb://<(echo $CIPHERTEXT | baes64 -d)
+
+aws kms create-key --key-spec ECC_NIST_p384 --key-usage SIGN_VERIFY
+aws kms sign --key-id $KEYID --message "my message to sign" --signing-algorithm ECDSA_SHA_384
+aws kms get-public-key --key-id $KEYID  --output text --query PublicKey | base64 -d > secp384r1_kms_pub.der
+openssl ec -pubin -inform DER -outform PEM -in secp384r1_kms_pub.der -pubout -out secp384r1_kms_pub.pem
+openssl dgst -sha284 -verify secp384r1_kms_pub.pem -signature signature.sig message.txt
